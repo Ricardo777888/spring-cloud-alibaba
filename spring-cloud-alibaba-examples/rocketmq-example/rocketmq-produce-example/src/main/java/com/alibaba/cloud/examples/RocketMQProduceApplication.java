@@ -26,7 +26,9 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.util.MimeTypeUtils;
 
 /**
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
@@ -44,15 +46,15 @@ public class RocketMQProduceApplication {
 		return new CustomRunner("output1");
 	}
 
-	@Bean
-	public CustomRunner customRunner2() {
-		return new CustomRunner("output3");
-	}
+//	@Bean
+//	public CustomRunner customRunner2() {
+//		return new CustomRunner("output3");
+//	}
 
-	@Bean
-	public CustomRunnerWithTransactional customRunnerWithTransactional() {
-		return new CustomRunnerWithTransactional();
-	}
+//	@Bean
+//	public CustomRunnerWithTransactional customRunnerWithTransactional() {
+//		return new CustomRunnerWithTransactional();
+//	}
 
 	public interface MySource {
 
@@ -83,29 +85,32 @@ public class RocketMQProduceApplication {
 
 		@Override
 		public void run(String... args) throws Exception {
-			if ("output1".equals(this.bindingName)) {
-				int count = 5;
-				for (int index = 1; index <= count; index++) {
-					String msgContent = "msg-" + index;
-					if (index % 3 == 0) {
-						senderService.send(msgContent);
-					}
-					else if (index % 3 == 1) {
-						senderService.sendWithTags(msgContent, "tagStr");
-					}
-					else {
-						senderService.sendObject(new Foo(index, "foo"), "tagObj");
-					}
-				}
-			}
-			else if ("output3".equals(this.bindingName)) {
-				int count = 20;
-				for (int index = 1; index <= count; index++) {
-					String msgContent = "pullMsg-" + index;
-					mySource.output3()
-							.send(MessageBuilder.withPayload(msgContent).build());
-				}
-			}
+			mySource.output1().send(MessageBuilder.withPayload("hello").build());
+//			if ("output1".equals(this.bindingName)) {
+//				int count = 5;
+//				for (int index = 1; index <= count; index++) {
+//					String msgContent = "msg-" + index;
+//					if (index % 3 == 0) {
+//						senderService.send(msgContent);
+//					}
+//					else if (index % 3 == 1) {
+//						senderService.sendWithTags(msgContent, "tagStr");
+//					}
+//					else {
+//						senderService.sendObject(new Foo(index, "foo"), "tagObj");
+//					}
+//				}
+//			}
+//			else if ("output3".equals(this.bindingName)) {
+//				int count = 20;
+//				for (int index = 1; index <= count; index++) {
+//					String msgContent = "pullMsg-" + index;
+//					Foo foo = new Foo(index, "foo");
+////					MessageBuilder.withPayload()
+//					mySource.output3()
+//							.send(MessageBuilder.withPayload(foo).setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON).build());
+//				}
+//			}
 
 		}
 

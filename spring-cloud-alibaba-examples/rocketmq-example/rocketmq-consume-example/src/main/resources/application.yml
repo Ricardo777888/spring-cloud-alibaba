@@ -1,0 +1,68 @@
+server:
+  port: 28082
+spring:
+  application:
+    name: rocketmq-consume-example
+  cloud:
+    stream:
+      bindings:
+        input1:
+          consumer:
+            push:
+              orderly: true
+          content-type: text/plain  # 内容类型
+          destination: test-topic # 目标topic名称
+          group: test-group1 # 消费者分组,命名规则：组名+topic名
+        input2:
+          consumer:
+            push:
+              orderly: false
+            subscription: tagStr
+            concurrency: 20
+            maxAttempts: 1
+          content-type: text/plain
+          destination: test-topic # 目标topic名称
+          group: test-group2
+        input3:
+          consumer:
+            subscription: tagObj
+            concurrency: 20
+          content-type: application/json
+          destination: test-topic # 目标topic名称
+          group: test-group3
+        input4:
+          consumer:
+            concurrency: 5
+          content-type: text/plain
+          destination: TransactionTopic
+          group: transaction-group
+        input5:
+          content-type: text/plain
+          destination: pull-topic
+          group: pull-topic-group
+
+      rocketmq:
+        # RocketMQ Binder 配置项，对应 RocketMQBinderConfigurationProperties 类
+        binder:
+          name-server: http://10.16.190.129:9876
+#        bindings:
+#          input1:
+#            consumer:
+#              push:
+#                orderly: true
+#          input2:
+#            consumer:
+#              push:
+#                orderly: false
+#              subscription: tagStr
+#          input3:
+#            consumer:
+#              subscription: tagObj
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'

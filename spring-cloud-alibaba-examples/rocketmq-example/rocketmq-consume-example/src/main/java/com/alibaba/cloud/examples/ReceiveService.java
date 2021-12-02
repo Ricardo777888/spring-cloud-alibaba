@@ -46,4 +46,9 @@ public class ReceiveService {
 		System.out.println("input4 receive transaction msg: " + transactionMsg);
 	}
 
+	@StreamListener("input5")
+	public void receiveTransactionalMsg2(String transactionMsg) {
+		System.out.println("input5 receive transaction msg: " + transactionMsg);
+	}
+
 }

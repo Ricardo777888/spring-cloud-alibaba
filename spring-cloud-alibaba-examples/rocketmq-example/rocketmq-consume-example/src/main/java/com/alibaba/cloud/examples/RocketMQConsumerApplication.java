@@ -40,10 +40,10 @@ public class RocketMQConsumerApplication {
 		SpringApplication.run(RocketMQConsumerApplication.class, args);
 	}
 
-	@Bean
-	public ConsumerCustomRunner customRunner() {
-		return new ConsumerCustomRunner();
-	}
+//	@Bean
+//	public ConsumerCustomRunner customRunner() {
+//		return new ConsumerCustomRunner();
+//	}
 
 	public interface MySink {
 
@@ -60,31 +60,33 @@ public class RocketMQConsumerApplication {
 		SubscribableChannel input4();
 
 		@Input("input5")
-		PollableMessageSource input5();
+		SubscribableChannel input5();
 
 	}
 
-	public static class ConsumerCustomRunner implements CommandLineRunner {
-
-		@Autowired
-		private MySink mySink;
-
-		@Override
-		public void run(String... args) throws InterruptedException {
-			while (true) {
-				mySink.input5().poll(m -> {
-					String payload = (String) m.getPayload();
-					if (payload.contains("0")) {
-						throw new IllegalArgumentException(
-								"111111111111111111111111111111111111111111");
-					}
-					System.out.println("pull msg: " + payload);
-				}, new ParameterizedTypeReference<String>() {
-				});
-				Thread.sleep(5_00);
-			}
-		}
-
-	}
+//	public static class ConsumerCustomRunner implements CommandLineRunner {
+//
+//		@Autowired
+//		private MySink mySink;
+//
+//		@Override
+//		public void run(String... args) throws InterruptedException {
+////			mySink.input1()
+//			while (true) {
+////				mySink.
+//				mySink.input5().poll(m -> {
+//					String payload = (String) m.getPayload();
+//					if (payload.contains("0")) {
+//						throw new IllegalArgumentException(
+//								"111111111111111111111111111111111111111111");
+//					}
+//					System.out.println("pull msg: " + payload);
+//				}, new ParameterizedTypeReference<String>() {
+//				});
+//				Thread.sleep(5_00);
+//			}
+//		}
+//
+//	}
 
 }
